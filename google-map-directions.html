@@ -109,6 +109,16 @@ information on the API.
           },
 
           /**
+           * Specifies that the Directions service may provide more than one route alternative in the response.
+           * Note that providing route alternatives may increase the response time from the server.
+           * This is only available for requests without intermediate waypoints.
+           */
+          provideRouteAlternatives: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
            * Array of intermediate waypoints. Directions will be calculated
            * from the origin to the destination by way of each waypoint in this array.
            * The maximum allowed waypoints is 8, plus the origin, and destination.
@@ -155,7 +165,7 @@ information on the API.
         },
 
         observers: [
-          '_route(startAddress, endAddress, travelMode, waypoints.*)'
+          '_route(startAddress, endAddress, travelMode, waypoints.*, provideRouteAlternatives)'
         ],
 
         _mapApiLoaded: function() {
@@ -202,7 +212,8 @@ information on the API.
             origin: this.startAddress,
             destination: this.endAddress,
             travelMode: this.travelMode,
-            waypoints: this.waypoints
+            waypoints: this.waypoints,
+            provideRouteAlternatives: this.provideRouteAlternatives
           };
           this.directionsService.route(request, function(response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
